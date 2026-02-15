@@ -10,8 +10,9 @@ import WhyUs from '@/components/WhyUs';
 import { Phone, MapPin } from 'lucide-react';
 
 export default function Home() {
-  const myPhone = "917067699504"; 
-  const myAddress = "Deen Dayal Nagar, Gwalior, MP"; 
+  const myPhone = "+91 70676 99504"; 
+  const myAddress = "Deen Dayal Nagar, Gwalior, M.P."; 
+  const whatsappLink = `https://wa.me/917067699504?text=Hi%20Floormistri%2C%20I%20am%20looking%20for%20a%20flooring%20quote.`;
 
   return (
     <main className="min-h-screen bg-white">
@@ -23,44 +24,67 @@ export default function Home() {
       <section id="calculator"><QuoteCalculator /></section>
       <section id="whyus"><WhyUs /></section>
 
-      {/* CONTACT SECTION - VISIBLE AND CLEAN */}
+      {/* CONTACT SECTION */}
       <section className="py-20 bg-white border-t border-gray-100" id="contact">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-slate-900 mb-12 text-center">Contact Us</h2>
-          <div className="grid md:grid-cols-2 gap-12 text-slate-900">
+          <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">Contact Us</h2>
+          <div className="grid md:grid-cols-2 gap-12">
+            {/* Left Column - Contact Details */}
             <div className="space-y-8">
               <div className="flex items-start gap-4">
-                <Phone className="text-orange-600" size={24} />
+                <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Phone className="text-amber-600" size={24} />
+                </div>
                 <div>
-                  <h3 className="font-bold">Call Now</h3>
-                  <p className="text-xl font-bold text-black">+{myPhone}</p>
+                  <h3 className="font-semibold text-gray-900 mb-1">Call or WhatsApp</h3>
+                  <p className="text-xl font-bold text-amber-600">{myPhone}</p>
+                  <p className="text-sm text-gray-500 mt-1">Available 8 AM – 8 PM</p>
                 </div>
               </div>
+              
               <div className="flex items-start gap-4">
-                <MapPin className="text-orange-600" size={24} />
+                <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <MapPin className="text-amber-600" size={24} />
+                </div>
                 <div>
-                  <h3 className="font-bold">Location</h3>
-                  <p className="text-lg text-black">{myAddress}</p>
+                  <h3 className="font-semibold text-gray-900 mb-1">Our Location</h3>
+                  <p className="text-lg text-gray-700">{myAddress}</p>
+                  <p className="text-sm text-gray-500 mt-1">Serving all Gwalior areas</p>
                 </div>
               </div>
             </div>
             
-            <div className="bg-orange-50 p-8 rounded-2xl border border-orange-200 text-center">
-              <h3 className="text-xl font-bold mb-4 text-black">Get an Instant Quote</h3>
+            {/* Right Column - Quote CTA */}
+            <div className="bg-amber-50 p-8 rounded-2xl border border-amber-200 text-center">
+              <h3 className="text-xl font-bold mb-3 text-gray-900">Get an Instant Quote</h3>
+              <p className="text-gray-600 mb-6">Reply within 2 hours ⚡</p>
               <a 
-                href={`https://wa.me/${myPhone}?text=Hi, I am looking for a flooring quote.`}
-                className="inline-block bg-orange-600 text-white px-8 py-4 rounded-xl font-bold"
+                href={whatsappLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-colors w-full sm:w-auto"
               >
-                Chat on WhatsApp
+                <span>📱</span> Chat on WhatsApp
               </a>
+              <p className="text-xs text-gray-500 mt-4">
+                Click to start a conversation. We'll respond quickly.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <footer className="bg-slate-900 text-white py-12 text-center">
-        <p className="font-bold text-xl text-white">Floormistri Gwalior</p>
-        <p className="text-slate-400 mt-2">© 2026 All Rights Reserved.</p>
+      {/* FOOTER */}
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <p className="font-bold text-2xl text-white mb-2">Floormistri</p>
+          <p className="text-amber-400 mb-4">Pure Craft, Total Perfection</p>
+          <p className="text-gray-400">{myAddress}</p>
+          <p className="text-gray-400 mt-2">{myPhone}</p>
+          <div className="border-t border-gray-800 mt-8 pt-8 text-sm text-gray-500">
+            © {new Date().getFullYear()} Floormistri. All rights reserved.
+          </div>
+        </div>
       </footer>
     </main>
   );
