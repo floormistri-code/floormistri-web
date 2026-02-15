@@ -1,102 +1,55 @@
 'use client'
-import { Grid, Layers, Square, Stairs, Home, Ruler } from 'lucide-react'
+import { Grid, Layers, Square, Layout, Home, Ruler } from 'lucide-react'
 
 const services = [
-  { 
-    title: "Ceramic & Vitrified Tiles", 
-    icon: <Grid className="w-6 h-6" />, 
-    desc: "Perfectly leveled, precise joints for a seamless look.",
-    tags: ["Wall Tiles", "Floor Tiles", "Digital Print"]
+  {
+    title: "Tile Installation",
+    description: "Expert installation of ceramic, porcelain, and vitrified tiles with perfect leveling.",
+    icon: Grid
   },
-  { 
-    title: "Marble & Granite", 
-    icon: <Square className="w-6 h-6" />, 
-    desc: "Expert fixing and diamond polishing for premium stone finishes.",
-    tags: ["Italian Marble", "Indian Granite", "Polishing"]
+  {
+    title: "Marble Polishing",
+    description: "Professional Italian and Indian marble polishing for a mirror-like finish.",
+    icon: Layers
   },
-  { 
-    title: "Kota Stone", 
-    icon: <Layers className="w-6 h-6" />, 
-    desc: "Traditional durability with a modern, smooth finish for indoor/outdoor.",
-    tags: ["Natural Stone", "Matte Finish", "Anti-Skid"]
+  {
+    title: "Granite Work",
+    description: "Precision cutting and fitting for kitchen platforms and stairs.",
+    icon: Layout
   },
-  { 
-    title: "Flooring Platforms", 
-    icon: <Home className="w-6 h-6" />, 
-    desc: "Custom platforms for pooja rooms, balconies, and courtyards.",
-    tags: ["Pooja Room", "Balcony", "Elevated"]
+  {
+    title: "Wooden Flooring",
+    description: "Premium laminate and hardwood flooring for a warm, luxury feel.",
+    icon: Square
   },
-  { 
-    title: "Staircase Treads", 
-    icon: <Stairs className="w-6 h-6" />, 
-    desc: "Anti-skid, flawless risers with precision-cut matching profiles.",
-    tags: ["Nosing", "Anti-Skid", "Profile Cutting"]
+  {
+    title: "Home Renovation",
+    description: "Complete flooring makeover for your dream home in Gwalior.",
+    icon: Home
   },
-  { 
-    title: "Skirting & Borders", 
-    icon: <Ruler className="w-6 h-6" />, 
-    desc: "Clean edges, pattern matching, and decorative borders for that perfect finish.",
-    tags: ["Skirting", "Border Design", "Pattern Work"]
+  {
+    title: "Site Measurement",
+    description: "Free accurate measurements and cost estimation at your doorstep.",
+    icon: Ruler
   }
 ]
 
 export default function Services() {
   return (
     <section id="services" className="py-20 bg-white">
-      <div className="container mx-auto px-6">
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Expertise</h2>
-          <p className="text-gray-600 text-lg">Gwalior's most trusted team for precision flooring execution across all surfaces.</p>
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Our Specialized Services</h2>
+          <div className="w-20 h-1 bg-orange-600 mx-auto"></div>
         </div>
-
-        {/* Services Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {services.map((service, i) => (
-            <div 
-              key={i} 
-              className="group p-8 rounded-2xl bg-white border border-gray-100 hover:border-amber-200 hover:shadow-lg transition-all duration-300"
-            >
-              {/* Icon with animated background */}
-              <div className="relative mb-6">
-                <div className="absolute inset-0 bg-amber-100 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 scale-110 group-hover:scale-100"></div>
-                <div className="relative w-14 h-14 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  {service.icon}
-                </div>
-              </div>
-
-              {/* Content */}
-              <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-amber-600 transition-colors">
-                {service.title}
-              </h3>
-              <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                {service.desc}
-              </p>
-
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2">
-                {service.tags.map((tag, idx) => (
-                  <span 
-                    key={idx}
-                    className="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full group-hover:bg-amber-50 group-hover:text-amber-700 transition-colors"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {services.map((service, index) => (
+            <div key={index} className="p-8 border border-gray-100 rounded-2xl hover:shadow-xl transition-shadow bg-slate-50">
+              <service.icon className="w-12 h-12 text-orange-600 mb-6" />
+              <h3 className="text-xl font-bold text-slate-900 mb-3">{service.title}</h3>
+              <p className="text-slate-600 leading-relaxed">{service.description}</p>
             </div>
           ))}
-        </div>
-
-        {/* Bottom CTA */}
-        <div className="text-center mt-16">
-          <p className="text-gray-500 mb-4">Not sure which service you need?</p>
-          <a 
-            href="#contact" 
-            className="inline-flex items-center gap-2 text-amber-600 font-semibold border border-amber-200 px-6 py-3 rounded-xl hover:bg-amber-50 transition-colors"
-          >
-            Get Free Consultation <span>→</span>
-          </a>
         </div>
       </div>
     </section>
