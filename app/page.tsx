@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from 'react';
-// These must match the files in your /components folder
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero'; 
 import Services from '@/components/Services';
@@ -14,26 +13,26 @@ import { Phone, MapPin } from 'lucide-react';
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // YOUR REAL DETAILS FROM YOUR SCREENSHOTS
+  // YOUR REAL DETAILS - VERIFIED FROM YOUR SCREENSHOTS
   const myPhone = "917067699504"; 
   const myAddress = "Deen Dayal Nagar, Gwalior, MP"; 
 
   return (
     <main className="min-h-screen bg-white">
-      {/* FIXED: Removed the error-causing prop to get you past the Build Failed screen */}
+      {/* 1. FIXED NAVBAR: Removed the part causing the crash */}
       <Navbar />
       
-      {/* ALL YOUR WORK FROM LAST NIGHT IS CALLED HERE */}
+      {/* 2. YOUR HARD WORK: All sections kept exactly as they are */}
       <Hero />
       <Services />
       <Portfolio />
       <QuoteCalculator />
       <WhyUs />
 
-      {/* CONTACT SECTION - DARK TEXT SO IT IS FINALLY VISIBLE */}
+      {/* 3. VISIBLE CONTACT SECTION: Dark text for readability */}
       <section className="py-20 bg-white border-t border-gray-100" id="contact">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-slate-900 mb-12 text-center">Let's Discuss Your Project</h2>
+          <h2 className="text-3xl font-bold text-slate-900 mb-12 text-center">Contact Floormistri Gwalior</h2>
           
           <div className="grid md:grid-cols-2 gap-12">
             <div className="space-y-8">
@@ -59,25 +58,24 @@ export default function Home() {
             </div>
             
             <div className="bg-orange-50 p-8 rounded-2xl border border-orange-100 text-center">
-              <h3 className="text-xl font-bold text-slate-900 mb-4">Get a Quote on WhatsApp</h3>
+              <h3 className="text-xl font-bold text-slate-900 mb-4">Message us on WhatsApp</h3>
               <a 
-                href={`https://wa.me/${myPhone}?text=Hi, I want to discuss a flooring project in Gwalior.`}
+                href={`https://wa.me/${myPhone}?text=Hi, I want to discuss a project with Floormistri.`}
                 className="inline-block bg-orange-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-orange-700 transition"
               >
-                Start Chat
+                Send Message
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
       <footer className="bg-slate-900 text-white py-12 text-center">
         <p className="font-bold text-xl">Floormistri Gwalior</p>
         <p className="text-slate-500 mt-2">© 2026 Surgical Precision in Every Square Foot.</p>
       </footer>
 
-      {/* YOUR MODAL */}
+      {/* 4. MODAL COMPONENT */}
       <VisitModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </main>
   );
