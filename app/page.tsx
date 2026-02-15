@@ -51,11 +51,11 @@ export default function Home() {
               <div className="space-y-6">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center"><Phone /></div>
-                  <div><p className="text-sm text-gray-500">Call Us</p><p className="font-bold">+91 XXXXXXXXXX</p></div>
+                  <div><p className="text-sm text-gray-500">Call Us</p><p className="font-bold">+91 7067699504</p></div>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center"><MapPin /></div>
-                  <div><p className="text-sm text-gray-500">Location</p><p className="font-bold">City Centre, Gwalior, MP</p></div>
+                  <div><p className="text-sm text-gray-500">Location</p><p className="font-bold">Deen Dayal Nagar, Gwalior, MP</p></div>
                 </div>
               </div>
             </div>
