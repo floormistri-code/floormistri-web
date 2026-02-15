@@ -1,50 +1,35 @@
+"use client";
+
 import React from 'react';
-import { Phone } from 'lucide-react';
 
-const Navbar = () => {
-  const myPhone = "+91 70676 99504";
-  const whatsappLink = "https://wa.me/917067699504?text=Hi%20Floormistri%2C%20I%20am%20looking%20for%20a%20flooring%20quote.";
+// This tells the code that the Navbar is allowed to handle the 'onOpenModal' command
+interface NavbarProps {
+  onOpenModal?: () => void;
+}
 
+const Navbar: React.FC<NavbarProps> = ({ onOpenModal }) => {
   return (
-    <nav className="fixed w-full bg-white/80 backdrop-blur-md z-50 border-b border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
-        {/* Logo */}
-        <div className="text-2xl font-bold text-gray-900">
-          Floormistri<span className="text-amber-600">.</span>
-        </div>
-        
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-8 text-gray-600 font-medium">
-          <a href="#services" className="hover:text-amber-600 transition-colors">Services</a>
-          <a href="#portfolio" className="hover:text-amber-600 transition-colors">Portfolio</a>
-          <a href="#whyus" className="hover:text-amber-600 transition-colors">Why Us</a>
+    <nav className="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
+          <div className="flex items-center">
+            <span className="text-2xl font-bold text-slate-900">Floormistri<span className="text-orange-600">.</span></span>
+          </div>
           
-          {/* Phone Number - Visible on Desktop */}
-          <a 
-            href={`tel:${myPhone.replace(/\s/g, '')}`}
-            className="flex items-center gap-2 text-gray-700 hover:text-amber-600 transition-colors"
-          >
-            <Phone size={18} className="text-amber-600" />
-            <span>{myPhone}</span>
-          </a>
-          
-          {/* Quote Button */}
-          <a 
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-amber-600 hover:bg-amber-700 text-white px-5 py-2.5 rounded-lg font-semibold transition-colors flex items-center gap-2"
-          >
-            <span>📱</span> Get Quote
-          </a>
+          <div className="hidden md:block">
+            <div className="ml-10 flex items-baseline space-x-8">
+              <a href="#" className="text-slate-700 hover:text-orange-600 font-medium">Home</a>
+              <a href="#services" className="text-slate-700 hover:text-orange-600 font-medium">Services</a>
+              <a href="#portfolio" className="text-slate-700 hover:text-orange-600 font-medium">Portfolio</a>
+              <button 
+                onClick={onOpenModal}
+                className="bg-orange-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-orange-700 transition"
+              >
+                Get Quote
+              </button>
+            </div>
+          </div>
         </div>
-
-        {/* Mobile Menu Button (you can expand this later) */}
-        <button className="md:hidden text-gray-700">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-          </svg>
-        </button>
       </div>
     </nav>
   );
