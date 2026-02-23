@@ -8,6 +8,7 @@ import { Project } from '@/lib/types'
 export default function ProjectDetailsPage() {
   const { id } = useParams()
   const [project, setProject] = useState<Project | null>(null)
+  const [isUpdating, setIsUpdating] = useState(false)
 
   useEffect(() => {
     async function fetchProject() {
@@ -22,10 +23,38 @@ export default function ProjectDetailsPage() {
     fetchProject()
   }, [id])
 
+  // Function to update progress percent
+  async function updateProgress() {
+    const newProgress = prompt("Enter new progress percentage (0-100):", project?.progress_percent.toString())
+    
+    if (newProgress === null) return // User cancelled
+    
+    const progressNum = parseInt(newProgress)
+    if (isNaN(progressNum) || progressNum < 0 || progressNum > 100) {
+      alert("Please enter a valid number between 0 and 100")
+      return
+    }
+
+    setIsUpdating(true)
+    const { error } = await supabase
+      .from('projects')
+      .update({ progress_percent: progressNum })
+      .eq('id', id)
+
+    if (error) {
+      alert("Error updating progress")
+      console.error(error)
+    } else {
+      // Update local state so UI refreshes without a full reload
+      setProject(prev => prev ? { ...prev, progress_percent: progressNum } : null)
+    }
+    setIsUpdating(false)
+  }
+
   if (!project) return <div className="p-8 text-center">Loading site details...</div>
 
   return (
-    <div className="p-8 max-w-5xl mx-auto bg-white min-h-screen shadow-sm">
+    <div className="p-8 max-w-5xl mx-auto bg-white min-h-screen shadow-sm text-black">
       <div className="border-b pb-6 mb-6">
         <h1 className="text-3xl font-bold text-gray-900">{project.project_name}</h1>
         <p className="text-gray-500 mt-2">📍 {project.site_address}</p>
@@ -52,17 +81,27 @@ export default function ProjectDetailsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="bg-gray-50 p-6 rounded-2xl border">
-          <h3 className="font-bold text-lg mb-4">Site Notes</h3>
+          <h3 className="font-bold text-lg mb-4 text-black">Site Notes</h3>
           <p className="text-gray-600 leading-relaxed">
             {project.notes || "No internal notes added for this project yet."}
           </p>
         </div>
         <div className="bg-gray-50 p-6 rounded-2xl border">
-          <h3 className="font-bold text-lg mb-4">Quick Actions</h3>
+          <h3 className="font-bold text-lg mb-4 text-black">Quick Actions</h3>
           <div className="space-y-3">
-            <button className="w-full py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-100">Add Site Photo</button>
-            <button className="w-full py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-100">Record Expense</button>
-            <button className="w-full py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Update Progress</button>
+            <button className="w-full py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 text-black">
+              Add Site Photo
+            </button>
+            <button className="w-full py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 text-black">
+              Record Expense
+            </button>
+            <button 
+              onClick={updateProgress}
+              disabled={isUpdating}
+              className="w-full py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50"
+            >
+              {isUpdating ? "Updating..." : "Update Progress"}
+            </button>
           </div>
         </div>
       </div>
