@@ -28,20 +28,22 @@ export default function DailyUpdatePage() {
       work_done: formData.get('work_done'),
       issues_faced: formData.get('issues'),
       next_steps: formData.get('next_steps'),
-      updated_by: 'Supervisor' // We can make this dynamic later
+      updated_by: 'Supervisor' 
     }])
 
     if (error) {
       alert("Error: " + error.message)
     } else {
       alert("Update Saved Successfully!")
-      router.push('/admin/dashboard')
+      // FIX: Changed from /admin/dashboard to /admin to avoid the 404 error
+      router.push('/admin') 
     }
     setLoading(false)
   }
 
   return (
     <div className="p-8 max-w-2xl mx-auto bg-white min-h-screen text-black">
+      <Link href="/admin" className="text-indigo-600 font-bold mb-6 inline-block">← Back to Dashboard</Link>
       <h1 className="text-3xl font-black italic uppercase mb-8 tracking-tighter">Daily Site Log</h1>
       
       <form onSubmit={handleSubmit} className="space-y-6 bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm">
