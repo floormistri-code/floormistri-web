@@ -31,16 +31,21 @@ export default function QuoteCalculator() {
           phone_number: phone, 
           area_sqft: area, 
           material_type: material, 
-          total_estimate: estimate 
+          total_estimate: estimate,
+          status: 'new',
+          site_location: 'Gwalior'
         }])
         .select()
 
       if (error) {
-        // This will tell us EXACTLY why Supabase is blocking the lead
         alert("Supabase Error: " + error.message);
         console.error("Detailed Debug Info:", error);
       } else {
         alert("SUCCESS! Lead saved to Floormistri Database.");
+        setName('')
+        setPhone('')
+        setArea(1000)
+        setMaterial('Marble')
         const message = `Hi Floormistri! I am ${name}. My project estimate is ₹${estimate.toLocaleString()}.`;
         window.open(`https://wa.me/917067699504?text=${encodeURIComponent(message)}`, '_blank');
       }
