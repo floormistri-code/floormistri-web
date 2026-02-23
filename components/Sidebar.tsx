@@ -11,6 +11,7 @@ export default function Sidebar() {
     { name: 'Projects', href: '/admin/projects', icon: '🏗️' },
     { name: 'Clients', href: '/admin/clients', icon: '👥' },
     { name: 'Craftsmen', href: '/admin/craftsmen', icon: '👷' },
+    { name: 'Quotations', href: '/admin/quotations', icon: '📄' }, // New Quotations Link Added Here
   ]
 
   return (
