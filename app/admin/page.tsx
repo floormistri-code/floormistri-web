@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { supabase, type Inquiry } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link' // Added Link for navigation
 
 export default function AdminDashboard() {
   const [inquiries, setInquiries] = useState<Inquiry[]>([])
@@ -142,10 +143,10 @@ export default function AdminDashboard() {
           ) : (
             <div className="divide-y divide-gray-200">
               {inquiries.map((inquiry) => (
-                <div key={inquiry.id} className="p-6 hover:bg-gray-50">
-                  <div className="flex justify-between items-start">
+                <div key={inquiry.id} className="p-6 hover:bg-gray-50 transition-colors">
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
+                      <div className="flex flex-wrap items-center gap-3 mb-2">
                         <h3 className="text-lg font-semibold text-gray-900">
                           {inquiry.client_name || 'No name provided'}
                         </h3>
@@ -157,11 +158,11 @@ export default function AdminDashboard() {
                         </span>
                       </div>
                       
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-8 mb-3">
                         <div className="text-sm text-gray-600">
                           <span className="font-medium">Phone: </span>
                           {inquiry.phone_number ? (
-                            <a href={`tel:${inquiry.phone_number}`} className="hover:text-indigo-600">
+                            <a href={`tel:${inquiry.phone_number}`} className="hover:text-indigo-600 transition-colors">
                               {inquiry.phone_number}
                             </a>
                           ) : (
@@ -185,10 +186,23 @@ export default function AdminDashboard() {
                         </div>
                       </div>
 
-                      <div className="mt-4 text-2xl font-bold text-green-600">
+                      <div className="mt-2 text-2xl font-bold text-green-600">
                         {formatPrice(inquiry.total_estimate)}
                       </div>
                     </div>
+
+                    {/* CONVERT TO PROJECT BUTTON */}
+                    <div className="flex-shrink-0 w-full md:w-auto">
+                      <Link 
+                        href={`/admin/projects/new?name=${encodeURIComponent(inquiry.client_name || '')}&phone=${inquiry.phone_number || ''}&area=${inquiry.area_sqft || ''}&material=${encodeURIComponent(inquiry.material_type || '')}`}
+                      >
+                        <button className="w-full md:w-auto bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-md transition-all active:scale-95 flex items-center justify-center gap-2">
+                          <span>Convert to Project</span>
+                          <span className="text-lg">→</span>
+                        </button>
+                      </Link>
+                    </div>
+
                   </div>
                 </div>
               ))}
