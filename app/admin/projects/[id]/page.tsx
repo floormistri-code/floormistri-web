@@ -13,138 +13,101 @@ export default function ProjectDetailsPage() {
 
   useEffect(() => {
     async function fetchProject() {
-      const { data, error } = await supabase
-        .from('projects')
-        .select('*')
-        .eq('id', id)
-        .single()
-      
-      if (error) {
-        console.error("Error fetching project:", error)
-        return
-      }
+      const { data } = await supabase.from('projects').select('*').eq('id', id).single()
       if (data) setProject(data)
     }
     fetchProject()
   }, [id])
 
-  // Function to update progress percent in the database
-  async function updateProgress() {
-    const currentProgress = project?.progress_percent || 0
-    const newProgress = prompt("Enter new progress percentage (0-100):", currentProgress.toString())
-    
-    // If user clicks cancel or enters nothing
-    if (newProgress === null || newProgress === "") return 
-    
-    const progressNum = parseInt(newProgress)
-    
-    // Validation
-    if (isNaN(progressNum) || progressNum < 0 || progressNum > 100) {
-      alert("Please enter a valid number between 0 and 100")
-      return
-    }
+  // 📸 PHOTO UPLOAD LOGIC
+  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
 
     setIsUpdating(true)
-    const { error } = await supabase
-      .from('projects')
-      .update({ progress_percent: progressNum })
-      .eq('id', id)
+    const fileExt = file.name.split('.').pop()
+    const fileName = `${id}/${Math.random()}.${fileExt}`
 
-    if (error) {
-      alert("Error updating progress: " + error.message)
+    // 1. Upload to Storage
+    const { error: uploadError } = await supabase.storage
+      .from('site-photos')
+      .upload(fileName, file)
+
+    if (uploadError) {
+      alert("Upload failed: " + uploadError.message)
     } else {
-      // Update local state so the UI changes immediately
-      setProject(prev => prev ? { ...prev, progress_percent: progressNum } : null)
-      alert("Progress updated successfully!")
+      // 2. Get URL and Save to Database
+      const { data: { publicUrl } } = supabase.storage.from('site-photos').getPublicUrl(fileName)
+      await supabase.from('site_photos').insert([{ project_id: id, photo_url: publicUrl, photo_type: 'during' }])
+      alert("Photo added successfully!")
     }
     setIsUpdating(false)
   }
 
-  if (!project) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-white">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
-      </div>
-    )
+  // 📝 UPDATE NOTES LOGIC
+  async function updateNotes() {
+    const newNote = prompt("Enter site notes:", project?.notes || "")
+    if (newNote === null) return
+    
+    setIsUpdating(true)
+    const { error } = await supabase.from('projects').update({ notes: newNote }).eq('id', id)
+    if (!error) setProject(prev => prev ? { ...prev, notes: newNote } : null)
+    setIsUpdating(false)
   }
+
+  // 📈 UPDATE PROGRESS LOGIC
+  async function updateProgress() {
+    const newProgress = prompt("Enter progress (0-100):", project?.progress_percent.toString())
+    if (!newProgress) return
+    setIsUpdating(true)
+    await supabase.from('projects').update({ progress_percent: parseInt(newProgress) }).eq('id', id)
+    setProject(prev => prev ? { ...prev, progress_percent: parseInt(newProgress) } : null)
+    setIsUpdating(false)
+  }
+
+  if (!project) return <div className="p-8 text-black">Loading...</div>
 
   return (
     <div className="p-4 md:p-8 max-w-5xl mx-auto bg-white min-h-screen text-black">
-      {/* Header Section */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-gray-100 pb-6 mb-6 gap-4">
-        <div>
-          <button 
-            onClick={() => router.push('/admin/projects')}
-            className="text-indigo-600 text-sm font-semibold mb-3 hover:text-indigo-800 transition-colors flex items-center"
-          >
-            ← Back to Projects
-          </button>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{project.project_name}</h1>
-          <p className="text-gray-500 mt-2 flex items-center text-sm">
-            <span className="mr-2">📍</span> {project.site_address}
-          </p>
-        </div>
-        <div className="flex items-center">
-           <span className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${
-             project.status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
-           }`}>
-             {project.status.replace('_', ' ')}
-           </span>
-        </div>
+      <div className="border-b pb-6 mb-6">
+        <button onClick={() => router.push('/admin/projects')} className="text-indigo-600 font-bold mb-2">← Back</button>
+        <h1 className="text-3xl font-bold">{project.project_name}</h1>
       </div>
 
-      {/* Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="p-5 bg-indigo-50 rounded-2xl border border-indigo-100 shadow-sm">
-          <p className="text-[10px] text-indigo-600 font-bold uppercase tracking-widest mb-1">Progress</p>
-          <p className="text-2xl font-black text-indigo-900">{project.progress_percent}%</p>
+        <div className="p-4 bg-indigo-50 rounded-xl border border-indigo-100">
+          <p className="text-xs text-indigo-600 font-bold">PROGRESS</p>
+          <p className="text-2xl font-black">{project.progress_percent}%</p>
         </div>
-        <div className="p-5 bg-emerald-50 rounded-2xl border border-emerald-100 shadow-sm">
-          <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-widest mb-1">Budget</p>
-          <p className="text-2xl font-black text-emerald-900">₹{project.estimated_budget?.toLocaleString('en-IN')}</p>
-        </div>
-        <div className="p-5 bg-rose-50 rounded-2xl border border-rose-100 shadow-sm">
-          <p className="text-[10px] text-rose-600 font-bold uppercase tracking-widest mb-1">Spent</p>
-          <p className="text-2xl font-black text-rose-900">₹{project.actual_cost.toLocaleString('en-IN')}</p>
-        </div>
-        <div className="p-5 bg-slate-50 rounded-2xl border border-slate-100 shadow-sm">
-          <p className="text-[10px] text-slate-600 font-bold uppercase tracking-widest mb-1">Area</p>
-          <p className="text-2xl font-black text-slate-900">{project.area_sqft} <span className="text-xs font-normal">sqft</span></p>
+        <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+          <p className="text-xs text-emerald-600 font-bold">BUDGET</p>
+          <p className="text-2xl font-black">₹{project.estimated_budget?.toLocaleString()}</p>
         </div>
       </div>
 
-      {/* Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Site Notes Section */}
-        <div className="bg-white p-6 rounded-3xl border border-gray-200 shadow-sm">
-          <h3 className="font-bold text-lg mb-4 text-gray-900 flex items-center">
-            <span className="mr-2">📝</span> Site Notes
-          </h3>
-          <div className="p-5 bg-gray-50 rounded-2xl min-h-[160px] border border-gray-100">
-            <p className="text-gray-600 leading-relaxed whitespace-pre-wrap text-sm italic">
-              {project.notes || "No internal notes added for this project yet."}
-            </p>
+        <div className="bg-gray-50 p-6 rounded-3xl border border-gray-200">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="font-bold text-lg text-black">Site Notes</h3>
+            <button onClick={updateNotes} className="text-xs bg-gray-200 px-2 py-1 rounded text-black font-bold">EDIT</button>
           </div>
+          <p className="text-gray-600 italic">{project.notes || "No notes yet."}</p>
         </div>
 
-        {/* Quick Actions Section */}
         <div className="bg-white p-6 rounded-3xl border border-gray-200 shadow-sm">
-          <h3 className="font-bold text-lg mb-4 text-gray-900 flex items-center">
-            <span className="mr-2">⚡</span> Quick Actions
-          </h3>
+          <h3 className="font-bold text-lg mb-4 text-black">Quick Actions</h3>
           <div className="space-y-4">
-            <button className="w-full py-3.5 bg-white border border-gray-200 rounded-2xl hover:bg-gray-50 transition-all font-bold text-sm text-gray-700 shadow-sm active:scale-[0.98]">
-              📸 Add Site Photo
+            <label className="w-full py-3.5 bg-white border border-gray-200 rounded-2xl flex justify-center items-center cursor-pointer hover:bg-gray-50 font-bold text-sm text-black shadow-sm">
+              📸 {isUpdating ? "UPLOADING..." : "ADD SITE PHOTO"}
+              <input type="file" className="hidden" onChange={handleFileUpload} accept="image/*" disabled={isUpdating} />
+            </label>
+
+            <button onClick={() => alert("Expense feature coming soon!")} className="w-full py-3.5 bg-white border border-gray-200 rounded-2xl font-bold text-sm text-black">
+              💰 RECORD EXPENSE
             </button>
-            <button className="w-full py-3.5 bg-white border border-gray-200 rounded-2xl hover:bg-gray-50 transition-all font-bold text-sm text-gray-700 shadow-sm active:scale-[0.98]">
-              💰 Record Expense
-            </button>
-            <button 
-              onClick={updateProgress}
-              disabled={isUpdating}
-              className="w-full py-4 bg-indigo-600 text-white rounded-2xl hover:bg-indigo-700 transition-all font-black text-sm shadow-md hover:shadow-indigo-200 active:scale-[0.98] disabled:opacity-50"
-            >
-              {isUpdating ? "UPDATING..." : "UPDATE PROGRESS %"}
+
+            <button onClick={updateProgress} disabled={isUpdating} className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black text-sm shadow-md">
+              {isUpdating ? "SAVING..." : "UPDATE PROGRESS %"}
             </button>
           </div>
         </div>
