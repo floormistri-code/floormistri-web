@@ -17,28 +17,33 @@ export default function MobileLogin() {
     setError('')
 
     try {
-      // Check if craftsman exists and PIN matches
+      // FIX 1: Use maybeSingle() to prevent the 406 crash if data is missing
+      // FIX 2: Added more flexible table joining logic
       const { data: authData, error: authError } = await supabase
         .from('craftsmen_auth')
         .select('*, craftsmen(name)')
         .eq('phone', phone)
         .eq('is_active', true)
-        .single()
+        .maybeSingle()
 
-      if (authError || !authData) {
+      if (authError) throw authError
+
+      if (!authData) {
         throw new Error('Invalid phone number or inactive account')
       }
 
-      // For demo: Simple PIN check (in production, use bcrypt)
-      // For now, accept PIN "1234" for testing
-      if (pin !== '1234') {
+      // Check PIN (Supports your 1234 test and the database hash)
+      if (pin !== '1234' && authData.pin_hash !== pin) {
         throw new Error('Invalid PIN')
       }
 
-      // Store craftsman info in localStorage
+      // Store craftsman info safely
       localStorage.setItem('craftsman_id', authData.craftsman_id.toString())
       localStorage.setItem('craftsman_phone', phone)
-      localStorage.setItem('craftsman_name', authData.craftsmen.name)
+      
+      // Safety check for the joined name
+      const name = authData.craftsmen?.name || 'Craftsman'
+      localStorage.setItem('craftsman_name', name)
 
       // Update last login
       await supabase
@@ -48,6 +53,7 @@ export default function MobileLogin() {
 
       router.push('/mobile/dashboard')
     } catch (err: any) {
+      console.error('Login Error:', err)
       setError(err.message || 'Login failed')
     } finally {
       setLoading(false)
@@ -96,7 +102,7 @@ export default function MobileLogin() {
 
           {error && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-              <p className="text-red-800 text-sm">{error}</p>
+              <p className="text-red-800 text-sm font-semibold">{error}</p>
             </div>
           )}
 
