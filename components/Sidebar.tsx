@@ -11,7 +11,9 @@ export default function Sidebar() {
     { name: 'Projects', href: '/admin/projects', icon: '🏗️' },
     { name: 'Clients', href: '/admin/clients', icon: '👥' },
     { name: 'Craftsmen', href: '/admin/craftsmen', icon: '👷' },
-    { name: 'Quotations', href: '/admin/quotations', icon: '📄' }, // New Quotations Link Added Here
+    { name: 'Quotations', href: '/admin/quotations', icon: '📄' },
+    { name: 'Billing', href: '/admin/billing', icon: '💰' }, // Sprint 2.3 Finance Hub
+    { name: 'Site Monitoring', href: '/admin/monitoring/update', icon: '📸' }, // Sprint 2.4 Daily Logs
   ]
 
   return (
@@ -19,7 +21,9 @@ export default function Sidebar() {
       <h2 className="text-2xl font-black mb-10 tracking-tighter italic">FLOORMISTRI</h2>
       <nav className="space-y-2">
         {links.map((link) => {
-          const isActive = pathname === link.href
+          // Check if the current path starts with the link href to keep it active for sub-pages
+          const isActive = pathname === link.href || pathname.startsWith(link.href + '/')
+          
           return (
             <Link 
               key={link.href} 
