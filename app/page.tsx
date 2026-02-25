@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Services from '@/components/Services';
 import Portfolio from '@/components/Portfolio';
+import BeforeAfter from '@/components/BeforeAfter'; // 1. IMPORT ADDED HERE
 import QuoteCalculator from '@/components/QuoteCalculator';
 import Testimonials from '@/components/Testimonials';
 import WhyUs from '@/components/WhyUs';
@@ -20,7 +21,7 @@ export default function Home() {
     <main className="min-h-screen bg-white">
       <Navbar onOpenModal={() => setIsModalOpen(true)} />
 
-      {/* HERO SECTION - Updated with Brand Colors & Trust Badges */}
+      {/* HERO SECTION */}
       <section className="pt-32 pb-20 bg-[#f0f9f6]">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <div className="inline-flex items-center gap-2 bg-[#e6f4ea] text-[#006837] px-4 py-2 rounded-full text-sm font-bold mb-6 border border-[#4CAF50]/20">
@@ -35,7 +36,7 @@ export default function Home() {
             Experience surgical precision in Tile, Marble, and Granite installation. System-driven execution for your dream home in Gwalior.
           </p>
 
-          {/* New Trust Badges */}
+          {/* Trust Badges */}
           <div className="flex flex-wrap justify-center gap-6 mb-10">
             <div className="flex items-center gap-2 text-[#003B49] font-semibold">
               <ShieldCheck className="text-[#4CAF50]" size={20} />
@@ -70,9 +71,16 @@ export default function Home() {
       </section>
 
       <Services />
+      
       <WhyUs />
+
+      {/* 2. BEFORE/AFTER SECTION ADDED HERE */}
+      <BeforeAfter />
+
       <Portfolio />
+      
       <Testimonials />
+      
       <QuoteCalculator />
 
       {/* MAP SECTION */}
@@ -88,7 +96,7 @@ export default function Home() {
         ></iframe>
       </section>
 
-      {/* CONTACT SECTION - Updated Branding */}
+      {/* CONTACT SECTION */}
       <section className="py-20 bg-white" id="contact">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -135,7 +143,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FOOTER - Updated Branding */}
+      {/* FOOTER */}
       <footer className="bg-[#001a21] text-white py-12">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <div className="text-2xl font-bold mb-4">Floormistri<span className="text-[#4CAF50]">.</span></div>
