@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Services from '@/components/Services';
 import Portfolio from '@/components/Portfolio';
-import BeforeAfter from '@/components/BeforeAfter'; // 1. IMPORT ADDED HERE
+import BeforeAfter from '@/components/BeforeAfter'; 
 import QuoteCalculator from '@/components/QuoteCalculator';
 import Testimonials from '@/components/Testimonials';
 import WhyUs from '@/components/WhyUs';
@@ -70,11 +70,11 @@ export default function Home() {
         </div>
       </section>
 
+      {/* COMPONENT SEQUENCE */}
       <Services />
       
       <WhyUs />
 
-      {/* 2. BEFORE/AFTER SECTION ADDED HERE */}
       <BeforeAfter />
 
       <Portfolio />
