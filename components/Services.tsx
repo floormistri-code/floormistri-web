@@ -20,7 +20,7 @@ const services = [
   {
     title: "Wooden Flooring",
     description: "Premium laminate and hardwood flooring for a warm, luxury feel.",
-    icon: Layers // Fixed the missing icon here
+    icon: Layers 
   },
   {
     title: "Home Renovation",
@@ -39,20 +39,22 @@ export default function Services() {
     <section id="services" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4 text-center">Our Specialized Services</h2>
-          <div className="w-20 h-1 bg-orange-600 mx-auto"></div>
+          <h2 className="text-3xl md:text-4xl font-bold text-[#003B49] mb-4 text-center">Our Specialized Services</h2>
+          {/* Accent bar changed from Orange to Deep Green */}
+          <div className="w-20 h-1 bg-[#006837] mx-auto"></div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <div 
               key={index} 
-              className="p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:border-orange-200 hover:shadow-xl hover:shadow-orange-500/5 transition-all group"
+              className="p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:border-[#4CAF50]/30 hover:shadow-xl hover:shadow-green-900/5 transition-all group"
             >
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm mb-6 group-hover:bg-orange-600 group-hover:text-white transition-colors">
-                <service.icon size={24} className="text-orange-600 group-hover:text-white" />
+              {/* Icon container changed from Orange hover to Deep Green hover */}
+              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm mb-6 group-hover:bg-[#006837] group-hover:text-white transition-colors">
+                <service.icon size={24} className="text-[#006837] group-hover:text-white" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">{service.title}</h3>
+              <h3 className="text-xl font-bold text-[#003B49] mb-3">{service.title}</h3>
               <p className="text-slate-600 leading-relaxed">{service.description}</p>
             </div>
           ))}
